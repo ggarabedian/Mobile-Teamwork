@@ -30,7 +30,7 @@
         </Grid.RowDefinitions>
 
         <!-- header -->
-        
+
         <controls:PageHeader Content="{Binding Title}"
                              Frame="{x:Bind Frame}">
             <Interactivity:Interaction.Behaviors>
@@ -39,7 +39,7 @@
         </controls:PageHeader>
 
         <!-- content -->
-        
+
         <Grid Name="panelAdd"
               Grid.Row="1"
               VerticalAlignment="Center">
@@ -53,66 +53,105 @@
 
             <Grid Grid.Row="0"
                   DataContext="{StaticResource newTask}">
-                <StackPanel>
-                    <TextBlock Margin="0 10 0 0"
-                               HorizontalAlignment="Center" 
-                               Text="Task Title" />
-                    <TextBox Name="tbTitle"
-                             Margin="40 10 40 0"
-                             Text="{Binding Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="80"/>
+                        <RowDefinition Height="130"/>
+                        <RowDefinition Height="80"/>
+                        <RowDefinition Height="200"/>
+                    </Grid.RowDefinitions>
 
-                    <TextBlock Margin="0 25 0 0" 
-                               HorizontalAlignment="Center" 
-                               Text="Complete before" />
+                    <Grid Grid.Row="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="50"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0"
+                                   FontSize="20"
+                                   HorizontalAlignment="Center" 
+                                   Text="Task Title" />
+                        <TextBox Grid.Row="1"
+                                 Name="tbTitle"
+                                 Text="{Binding Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 VerticalAlignment="Center"/>
+                    </Grid>
 
-                    <DatePicker Margin="70 10 0 0"
-                                Grid.Column="0" 
-                                Date="{Binding TaskDateTime,
+                    <Grid Grid.Row="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="50"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0"
+                                   HorizontalAlignment="Center" 
+                                   Text="Complete before"
+                                   FontSize="20"/>
+
+                        <DatePicker Grid.Row="1"
+                                    HorizontalAlignment="Center"
+                                    Grid.Column="0" 
+                                    Date="{Binding TaskDateTime,
                                         UpdateSourceTrigger=PropertyChanged, 
                                         Mode=TwoWay,
                                         Converter={StaticResource DateTimeToDateTimeOffsetConverter}}"/>
 
-                    <TimePicker Margin="95 20 0 0"
-                                Time="{Binding TaskDateTimeTimeSpanProxy, 
+                        <TimePicker Grid.Row="2"
+                                    HorizontalAlignment="Center"
+                                    Time="{Binding TaskDateTimeTimeSpanProxy, 
                                         UpdateSourceTrigger=PropertyChanged,
                                         Mode=TwoWay}"/>
+                    </Grid>
 
-                    <TextBlock Margin="0 25 0 0" 
-                               HorizontalAlignment="Center" 
-                               Text="Importance" />
-                    <ComboBox Margin="0 10 0 0"
-                              HorizontalAlignment="Center"
-                              ItemsSource="{Binding Importances}"
-                              SelectedItem="{Binding TaskImportance, Mode=TwoWay}">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="*" />
-                                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Row="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="50"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" 
+                                   HorizontalAlignment="Center" 
+                                   Text="Importance"
+                                   FontSize="20"/>
+                        <ComboBox Grid.Row="1"
+                                  HorizontalAlignment="Center"
+                                  ItemsSource="{Binding Importances}"
+                                  SelectedItem="{Binding TaskImportance, Mode=TwoWay}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
 
-                                    <Rectangle Grid.Column="0" Height="20" Width="20" Margin="2" VerticalAlignment="Center" Stroke="{ThemeResource SystemControlForegroundBaseHighBrush }" StrokeThickness="1">
-                                        <Rectangle.Fill>
-                                            <SolidColorBrush Color="{Binding Color}" />
-                                        </Rectangle.Fill>
-                                    </Rectangle>
-                                    <TextBlock Text="{Binding Importance}" Grid.Column="1" VerticalAlignment="Center"/>
-                                </Grid>
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
-                    <Button Margin="0 20 0 0"
-                            Click="CaptureImage"
-                            HorizontalAlignment="Center" 
-                            Content="Capture Image"/>
-                    <Image Name="capturedImage"
-                           Margin="0 10 0 0" 
-                           Height="150"
-                           MaxWidth="150"
-                           MaxHeight="150"
-                           Tag="{Binding ImageUrl, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                </StackPanel>
+                                        <Rectangle Grid.Column="0" Height="20" Width="20" Margin="2" VerticalAlignment="Center" Stroke="{ThemeResource SystemControlForegroundBaseHighBrush }" StrokeThickness="1">
+                                            <Rectangle.Fill>
+                                                <SolidColorBrush Color="{Binding Color}" />
+                                            </Rectangle.Fill>
+                                        </Rectangle>
+                                        <TextBlock Text="{Binding Importance}" Grid.Column="1" VerticalAlignment="Center"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </Grid>
+
+                    <Grid Grid.Row="3">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="150"/>
+                        </Grid.RowDefinitions>
+                        <Button Grid.Row="0"
+                                Click="CaptureImage"
+                                HorizontalAlignment="Center" 
+                                Content="Capture Image"/>
+                        <Image Name="capturedImage"
+                               Grid.Row="1" 
+                               Height="150"
+                               MaxWidth="150"
+                               MaxHeight="150"
+                               Tag="{Binding ImageUrl, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    </Grid>
+                </Grid>
             </Grid>
 
             <Grid Grid.Row="1">
