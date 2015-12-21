@@ -1,0 +1,129 @@
+﻿<Page 
+    x:Class="PersonalOrganiser.Views.Tasker.AddNewTaskPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:Behaviors="using:Template10.Behaviors"
+    xmlns:Core="using:Microsoft.Xaml.Interactions.Core"
+    xmlns:Interactivity="using:Microsoft.Xaml.Interactivity"
+    xmlns:controls="using:Template10.Controls"
+    xmlns:local="using:PersonalOrganiser.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:m ="using:PersonalOrganiser.Models"
+    xmlns:vm="using:PersonalOrganiser.ViewModels.Tasker" 
+    xmlns:helpers="using:PersonalOrganiser.Helpers"
+    mc:Ignorable="d">
+
+    <Page.DataContext>
+        <vm:AddNewTaskPageViewModel />
+    </Page.DataContext>
+
+    <Page.Resources>
+        <helpers:DateTimeToDateTimeOffsetConverter x:Key="DateTimeToDateTimeOffsetConverter"/>
+    </Page.Resources>
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <!-- header -->
+        
+        <controls:PageHeader Content="{Binding Title}"
+                             Frame="{x:Bind Frame}">
+            <Interactivity:Interaction.Behaviors>
+                <Behaviors:EllipsisBehavior Visibility="Collapsed" />
+            </Interactivity:Interaction.Behaviors>
+        </controls:PageHeader>
+
+        <!-- content -->
+        
+        <Grid Name="panelAdd"
+              Grid.Row="1"
+              VerticalAlignment="Center">
+            <Grid.Resources>
+                <m:TaskModel x:Key="newTask" />
+            </Grid.Resources>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="60"/>
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0"
+                  DataContext="{StaticResource newTask}">
+                <StackPanel>
+                    <TextBlock Margin="0 10 0 0"
+                               HorizontalAlignment="Center" 
+                               Text="Task Title" />
+                    <TextBox Name="tbTitle"
+                             Margin="40 10 40 0"
+                             Text="{Binding Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+                    <TextBlock Margin="0 25 0 0" 
+                               HorizontalAlignment="Center" 
+                               Text="Complete before" />
+
+                    <DatePicker Margin="70 10 0 0"
+                                Grid.Column="0" 
+                                Date="{Binding TaskDateTime,
+                                        UpdateSourceTrigger=PropertyChanged, 
+                                        Mode=TwoWay,
+                                        Converter={StaticResource DateTimeToDateTimeOffsetConverter}}"/>
+
+                    <TimePicker Margin="95 20 0 0"
+                                Time="{Binding TaskDateTimeTimeSpanProxy, 
+                                        UpdateSourceTrigger=PropertyChanged,
+                                        Mode=TwoWay}"/>
+
+                    <TextBlock Margin="0 25 0 0" 
+                               HorizontalAlignment="Center" 
+                               Text="Importance" />
+                    <ComboBox Margin="0 10 0 0"
+                              HorizontalAlignment="Center"
+                              ItemsSource="{Binding Importances}"
+                              SelectedItem="{Binding TaskImportance, Mode=TwoWay}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <Rectangle Grid.Column="0" Height="20" Width="20" Margin="2" VerticalAlignment="Center" Stroke="{ThemeResource SystemControlForegroundBaseHighBrush }" StrokeThickness="1">
+                                        <Rectangle.Fill>
+                                            <SolidColorBrush Color="{Binding Color}" />
+                                        </Rectangle.Fill>
+                                    </Rectangle>
+                                    <TextBlock Text="{Binding Importance}" Grid.Column="1" VerticalAlignment="Center"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    <Button Margin="0 20 0 0"
+                            Click="CaptureImage"
+                            HorizontalAlignment="Center" 
+                            Content="Capture Image"/>
+                    <Image Name="capturedImage"
+                           Margin="0 10 0 0" 
+                           Height="150"
+                           MaxWidth="150"
+                           MaxHeight="150"
+                           Tag="{Binding ImageUrl, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+            </Grid>
+
+            <Grid Grid.Row="1">
+                <Button Margin="0 10 0 0" 
+                        HorizontalAlignment="Center" 
+                        Content="Save"
+                        CommandParameter="{StaticResource newTask}"
+                        Command="{Binding ContentViewModel.Save}"
+                        Click="{x:Bind ViewModel.AddNewTask}"/>
+            </Grid>
+        </Grid>
+    </Grid>
+</Page>
+
